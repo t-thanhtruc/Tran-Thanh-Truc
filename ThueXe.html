@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saigontourist - Dịch vụ cho thuê xe</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="thuê xe.css">
+    <style>
+            /* Reset cơ bản */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        color: #222;
+        background: #fff;
+        line-height: 1.6;
+    }
+
+    /* Header */
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 80px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: rgba(255,255,255,0.95);
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    header .logo img {
+        height: 50px;
+    }
+
+    nav ul {
+        list-style: none;
+        display: flex;
+        gap: 30px;
+    }
+
+    nav a {
+        text-decoration: none;
+        color: #000;
+        font-weight: 500;
+        transition: color 0.3s;
+    }
+
+    nav a:hover {
+        color: #0078d7;
+    }
+
+    /* Hero */
+    .hero {
+        background: url('https://nhieuxe.vn/upload/202406/16/bang-gia-cho-thue-xe-di-cong-tac-tai-tphcm-theo-gio-theo-ngay-2024-hbj301.jpeg') center/cover no-repeat fixed;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: white;
+        position: relative;
+        overflow: hidden;
+        transition: background-image 1.2s ease-in-out;
+    }
+
+    .hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        z-index: 1;
+        transition: background 1s ease;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 800px;
+        padding: 20px;
+        opacity: 0;
+        transform: translateY(40px);
+        transition: all 1s ease;
+    }
+
+    .hero-content.active {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .hero h1 {
+        font-size: 3rem;
+        margin-bottom: 20px;
+        font-weight: 800;
+        animation: fadeInDown 1.2s ease both;
+    }
+
+    .hero p {
+        font-size: 1.2rem;
+        margin-bottom: 30px;
+        animation: fadeInUp 1.5s ease both;
+    }
+
+    .hero-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .btn {
+        padding: 12px 25px;
+        border-radius: 5px;
+        font-weight: 600;
+        text-decoration: none;
+        color: white;
+        background: #0078d7;
+        transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+        background: #005fa3;
+        transform: scale(1.05);
+    }
+
+    /* Hiệu ứng text animation */
+    @keyframes fadeInDown {
+        from {opacity: 0; transform: translateY(-50px);}
+        to {opacity: 1; transform: translateY(0);}
+    }
+
+    @keyframes fadeInUp {
+        from {opacity: 0; transform: translateY(50px);}
+        to {opacity: 1; transform: translateY(0);}
+    }
+
+
+    /* About */
+    .about {
+        padding: 100px 60px;
+        text-align: center;
+    }
+
+    .about h2 {
+        font-size: 2.2rem;
+        color: #000;
+        margin-bottom: 10px;
+    }
+
+    .stats {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 50px;
+        margin-top: 50px;
+    }
+
+    .stat-box h3 {
+        font-size: 2.5rem;
+        color: #0078d7;
+    }
+
+    .stat-box p {
+        margin-top: 10px;
+    }
+    /* ===== ABOUT SECTION (HÌNH BÊN TRÁI, NỘI DUNG BÊN PHẢI) ===== */
+    .about-section {
+        width: 100%;
+        background: #f9fbff;
+        padding: 100px 80px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .about-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 1200px;
+        gap: 60px;
+        flex-wrap: wrap;
+    }
+
+    .about-image {
+        flex: 1;
+        position: relative;
+        opacity: 0;
+        transform: translateX(-60px);
+        transition: all 1s ease;
+    }
+
+    .about-image.active {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .about-image img {
+        width: 100%;
+        max-width: 550px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        transition: transform 0.5s ease;
+    }
+
+    .about-image img:hover {
+        transform: scale(1.05);
+    }
+
+    .about-content {
+        flex: 1;
+        opacity: 0;
+        transform: translateX(60px);
+        transition: all 1s ease;
+    }
+
+    .about-content.active {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .about-content h2 {
+        font-size: 2.4rem;
+        color: #0078d7;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .about-content p {
+        color: #333;
+        font-size: 1rem;
+        line-height: 1.8;
+        margin-bottom: 20px;
+    }
+
+    .about-btn {
+        background: #0078d7;
+        color: #fff;
+        text-decoration: none;
+        padding: 12px 28px;
+        border-radius: 6px;
+        font-weight: 600;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+    .about-btn:hover {
+        background: #005fa3;
+        transform: scale(1.05);
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+        .about-container {
+            flex-direction: column;
+            text-align: center;
+        }
+        .about-image img {
+            max-width: 100%;
+        }
+    }
+
+    /* ===== SERVICES SECTION ===== */
+    .services {
+        background: #f5faff;
+        padding: 100px 60px;
+        text-align: center;
+    }
+
+    .section-title {
+        font-size: 2.4rem;
+        color: #000;
+        font-weight: 700;
+        margin-bottom: 60px;
+        position: relative;
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        width: 80px;
+        height: 4px;
+        background: #0078d7;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 3px;
+    }
+
+    .service-grid {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 40px;
+    }
+
+    .service-box {
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        width: 320px;
+        padding: 40px 25px;
+        transition: all 0.4s ease;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        opacity: 0;
+        transform: translateY(60px);
+    }
+
+    .service-box:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    .icon-circle {
+        width: 90px;
+        height: 90px;
+        background: #e6f2ff;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto 20px;
+        color: #0078d7;
+        font-size: 36px;
+        transition: all 0.4s ease;
+    }
+
+    .service-box:hover .icon-circle {
+        background: #0078d7;
+        color: #fff;
+        transform: rotate(10deg) scale(1.1);
+    }
+
+    .service-box h3 {
+        font-size: 1.25rem;
+        margin-bottom: 15px;
+        color: #000;
+        font-weight: 600;
+    }
+
+    .service-box p {
+        color: #444;
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    /* Ripple effect */
+    .service-box::before {
+        content: '';
+        position: absolute;
+        top: var(--ripple-y);
+        left: var(--ripple-x);
+        width: 0;
+        height: 0;
+        background: rgba(0, 120, 215, 0.2);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.6s ease, height 0.6s ease, opacity 0.6s ease;
+        opacity: 0;
+        z-index: 0;
+    }
+
+    .service-box.ripple-active::before {
+        width: 300%;
+        height: 300%;
+        opacity: 1;
+    }
+
+    /* Animation */
+    .fade-in-up {
+        animation: fadeInUp 0.8s ease forwards;
+    }
+    @keyframes fadeInUp {
+        from {opacity: 0; transform: translateY(60px);}
+        to {opacity: 1; transform: translateY(0);}
+    }
+
+    /* ===== TESTIMONIAL BOX ===== */
+    .testimonial-box {
+        background: linear-gradient(135deg, #0078d7, #005fa3);
+        color: white;
+        border-radius: 15px;
+        margin-top: 80px;
+        padding: 50px 40px;
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        position: relative;
+    }
+
+    .quote-icon {
+        font-size: 40px;
+        color: #fff;
+        opacity: 0.7;
+    }
+
+    .quote-text {
+        font-style: italic;
+        margin: 20px 0;
+        line-height: 1.7;
+    }
+
+    .author-info {
+        margin-top: 10px;
+    }
+
+    .author-name {
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+
+    .author-title {
+        font-size: 0.9rem;
+        opacity: 0.85;
+    }
+    
+    /* ===== COMPANY VALUES SECTION (CÓ HIỆU ỨNG NỀN ĐỘNG) ===== */
+    .values {
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+        color: #000;
+        padding: 100px 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(120deg, #f9fbff, #eaf3ff);
+        background-size: 200% 200%;
+        animation: gradientMove 10s ease infinite;
+    }
+
+    /* Hiệu ứng gradient di chuyển */
+    @keyframes gradientMove {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .values::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: 0;
+        width: 100%;
+        height: 200%;
+        background: url('https://cdn.pixabay.com/photo/2017/06/06/15/25/world-map-2370067_1280.png') center/cover no-repeat;
+        opacity: 0.07;
+        transform: translateY(0);
+        transition: transform 0.5s ease-out;
+        z-index: 0;
+    }
+
+    .values-content {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 60px;
+        max-width: 1200px;
+        width: 100%;
+    }
+
+    .values .text {
+        flex: 1;
+        opacity: 0;
+        transform: translateX(-60px);
+        transition: all 1s ease;
+    }
+
+    .values .text.active {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .values .text h2 {
+        font-size: 2.2rem;
+        color: #0078d7;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .values .text p {
+        font-size: 1rem;
+        color: #333;
+        line-height: 1.8;
+        margin-bottom: 30px;
+    }
+
+    .values-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .values-list li {
+        font-size: 1.05rem;
+        color: #000;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transition: transform 0.3s ease;
+    }
+
+    .values-list li:hover {
+        transform: translateX(8px);
+    }
+
+    .values-list i {
+        color: #0078d7;
+        font-size: 1.3rem;
+    }
+
+    .values .image {
+        flex: 1;
+        text-align: right;
+        opacity: 0;
+        transform: translateX(60px);
+        transition: all 1s ease;
+    }
+
+    .values .image.active {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .values .image img {
+        width: 100%;
+        max-width: 550px;
+        border-radius: 10px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        transition: transform 0.4s ease;
+    }
+
+    .values .image img:hover {
+        transform: scale(1.03);
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+        .values-content {
+            flex-direction: column;
+            text-align: center;
+        }
+        .values .image {
+            text-align: center;
+            margin-top: 30px;
+        }
+    }
+    /* Footer */
+    footer {
+        text-align: center;
+        background: #222;
+        color: white;
+        padding: 50px 0;
+        font-size: 0.95rem;
+    }
+    .fadeInUp {
+        animation: fadeInUp 0.8s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    </style>
+</head>
+<body>
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="logo">
+            <img src="images/logo.png" alt="HoChiMinhTourist Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#home">Trang chủ</a></li>
+                <li><a href="#about">Về công ty</a></li>
+                <li><a href="#values">Tại sao chọn chúng tôi</a></li>
+                <li><a href="#services">Dịch vụ</a></li>
+                <li><a href="#contact">Liên hệ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ===== HERO SECTION ===== -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Chuyến Đi An Toàn - Dịch Vụ Chuyên Nghiệp</h1>
+            <p>Đội ngũ chuyên nghiệp của chúng tôi làm việc để mang lại trải nghiệm thoải mái và an toàn cho khách hàng.</p>
+            <div class="hero-buttons">
+                <a href="#about" class="btn black">Tìm hiểu thêm</a>
+                <a href="#contact" class="btn blue">Liên hệ</a>
+            </div>
+        </div>
+    </section>
+
+        <!-- ===== ABOUT SECTION ===== -->
+    <section id="about" class="about-section">
+        <div class="about-container">
+            <div class="about-image">
+                <img src="https://xedatphuongnam.vn/upload/product/z2577430852245c7209a74958dc8676b3cca47c1f32a4b-7338.jpg" alt="HoChiMinhTourist">
+            </div>
+            <div class="about-content">
+                <h2>Về HoChiMinhtourist</h2>
+                <p>
+                    HoChiMinhtourist là một trong thương hiệu hàng đầu Việt Nam trong lĩnh vực du lịch &ndash; vận chuyển.
+                    Với gần <strong>50 năm kinh nghiệm</strong>, chúng tôi không ngừng mang đến cho khách hàng những hành trình an toàn, tiện nghi và đáng nhớ.
+                </p>
+                <p>
+                    Đội ngũ tài xế chuyên nghiệp, hệ thống xe hiện đại và dịch vụ tận tâm giúp chúng tôi trở thành lựa chọn số một của hàng nghìn khách hàng trong và ngoài nước.
+                </p>
+                <a href="#services" class="btn about-btn">Khám phá dịch vụ</a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ===== COMPANY VALUES ===== -->
+    <section id="values" class="values">
+        <div class="values-content">
+            <div class="text">
+                <h2>Giá trị cốt lõi </h2>
+                <p>
+                    Với gần 50 năm hình thành và phát triển, HoChiMinhtourist luôn đặt<strong>chất lượng – uy tín – sáng tạo</strong> làm nền tảng hoạt động.
+                    Chúng tôi không chỉ mang đến những chuyến đi an toàn mà còn là trải nghiệm văn hóa, niềm vui và sự gắn kết trong từng hành trình.
+                </p>
+                <ul class="values-list">
+                    <li><i class="fas fa-handshake"></i> <span>Uy tín hàng đầu</span></li>
+                    <li><i class="fas fa-users"></i> <span>Khách hàng là trọng tâm</span></li>
+                    <li><i class="fas fa-globe-asia"></i> <span>Phát triển bền vững & hội nhập</span></li>
+                </ul>
+            </div>
+            <div class="image">
+                <img src="./logo.png" alt="Giá trị công ty HoChiMinhTourist">
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SERVICES ===== -->
+    <section id="services" class="services">
+        <div class="container">
+            <h2 class="section-title">Dịch vụ của chúng tôi</h2>
+            <!-- GRID DỊCH VỤ -->
+            <div class="service-grid">
+
+                <div class="service-box ripple">
+                    <div class="icon-circle"><i class="fas fa-bus"></i></div>
+                    <h3>Cho thuê xe du lịch gia đình</h3>
+                    <p>Trải nghiệm hành trình vui vẻ cùng gia đình với các loại xe đa dạng, từ 7 đến 45 chỗ, đảm bảo thoải mái và an toàn.</p>
+                </div>
+
+                <div class="service-box ripple">
+                    <div class="icon-circle"><i class="fas fa-briefcase"></i></div>
+                    <h3>Cho thuê xe đi công tác</h3>
+                    <p>Dịch vụ chuyên nghiệp cho doanh nghiệp, hội nghị và sự kiện &ndash; đảm bảo đúng giờ và an toàn tuyệt đối.</p>
+                </div>
+
+                <div class="service-box ripple">
+                    <div class="icon-circle"><i class="fas fa-plane"></i></div>
+                    <h3>Xe đưa đón sân bay</h3>
+                    <p>Đưa đón khách tận nơi, xe sạch đẹp, tài xế thân thiện, phục vụ 24/7 cho mọi chuyến bay.</p>
+                </div>
+
+            </div>
+            <!-- Ô ĐÁNH GIÁ -->
+            <div class="testimonial-box">
+                <div class="testimonial-content">
+                    <i class="fas fa-quote-left quote-icon"></i>
+                    <p class="quote-text">
+                        “Dịch vụ của Lữ Hành HoChiMinhtourist thật sự xuất sắc! Tôi đã trải qua một hành trình du lịch vô cùng thoải mái và an toàn.
+                        Đội ngũ tài xế chuyên nghiệp, xe đẹp và sạch sẽ. Tôi hoàn toàn hài lòng và sẽ tiếp tục lựa chọn họ cho các chuyến đi tiếp theo của mình.”
+                    </p>
+                    <div class="author-info">
+                        <p class="author-name">Duy Kha</p>
+                        <p class="author-title">Trưởng phòng Vận hành</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer id="contact">
+        <p>📞 Hotline: 1900 1234 | ✉️ Email: nhom5@hochiminhtourist.vn</p>
+        <p>© 2025 HoChiMinhtourist. All rights reserved.</p>
+    </footer>
+
+    <script>
+        $(document).ready(function() {
+        // Cuộn mượt khi click menu
+        $('nav a').on('click', function(e) {
+            if (this.hash !== '') {
+                e.preventDefault();
+                const hash = this.hash;
+                $('html, body').animate({
+                    scrollTop: $(hash).offset().top - 80
+                }, 700);
+            }
+        });
+
+        // Hiệu ứng hiện dần khi cuộn xuống
+        $(window).on('scroll', function() {
+            $('.service-box, .stat-box').each(function() {
+                const boxTop = $(this).offset().top;
+                const windowBottom = $(window).scrollTop() + $(window).height();
+                if (boxTop < windowBottom - 50) {
+                    $(this).addClass('fadeInUp');
+                }
+            });
+        });
+    });
+    // ==== HERO BACKGROUND SLIDESHOW + TEXT ANIMATION + PARALLAX ====
+        $(document).ready(function () {
+        const hero = $('.hero');
+        const heroContent = $('.hero-content');
+        const backgrounds = [
+            'https://nhieuxe.vn/upload/202406/16/bang-gia-cho-thue-xe-di-cong-tac-tai-tphcm-theo-gio-theo-ngay-2024-hbj301.jpeg',
+            'https://xedatphuongnam.vn/upload/product/z2577430852245c7209a74958dc8676b3cca47c1f32a4b-7338.jpg',
+            'https://product.hstatic.net/200000504989/product/dat-mui-ca-mau-4_ac30d9ad4fdc4dbbbef621a47ba396c7_master.jpg',
+            'https://minhviettrans.com/images/product/banner-16c.jpg',
+            'https://www.hathanhford.com.vn/wp-content/uploads/Transit_16cho_trancao_noithat_40-scaled.jpg',
+            'https://cdn-images.vtv.vn/zoom/554_346/2022/8/8/xe-limousine-cho-khach-1659671782603-16599251732981354125978.jpeg'
+        ];
+
+        let current = 0;
+
+        function changeBackground() {
+            current = (current + 1) % backgrounds.length;
+            hero.fadeOut(800, function() {
+                hero.css('background-image', `url(${backgrounds[current]})`);
+                hero.fadeIn(800);
+            });
+
+            // Hiệu ứng chữ
+            heroContent.removeClass('active');
+            setTimeout(() => heroContent.addClass('active'), 1000);
+        }
+
+        // Hiệu ứng parallax khi cuộn
+        $(window).on('scroll', function() {
+            const scrollTop = $(window).scrollTop();
+            hero.css('background-position', `center ${scrollTop * 0.4}px`);
+        });
+        // Bắt đầu slideshow
+            heroContent.addClass('active');
+            setInterval(changeBackground, 6000);
+        });
+        
+        // Hiệu ứng xuất hiện phần Giới thiệu
+        $(window).on('scroll', function() {
+            const aboutTop = $('#about').offset().top;
+            const windowBottom = $(window).scrollTop() + $(window).height();
+            if (aboutTop < windowBottom - 100) {
+                $('#about .about-image, #about .about-content').addClass('active');
+            }
+        });
+        // ==== Hiệu ứng xuất hiện khi cuộn đến các ô dịch vụ ====
+        $(window).on('scroll', function() {
+            $('.service-box').each(function() {
+                const top = $(this).offset().top;
+                const windowBottom = $(window).scrollTop() + $(window).height();
+                if (top < windowBottom - 100) {
+                    $(this).addClass('fade-in-up');
+                }
+            });
+        });
+
+        // ==== Hiệu ứng ripple khi click vào ô dịch vụ ====
+        $('.service-box').on('click', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            $(this)
+                .css('--ripple-x', `${x}px`)
+                .css('--ripple-y', `${y}px`)
+                .addClass('ripple-active');
+
+            setTimeout(() => $(this).removeClass('ripple-active'), 600);
+        });
+        // ==== Hiệu ứng xuất hiện cho phần Giá trị công ty + parallax nền ====
+        $(window).on('scroll', function() {
+            const scrollTop = $(window).scrollTop();
+            const windowHeight = $(window).height();
+            const values = $('#values');
+            const valuesTop = values.offset().top;
+
+            // Hiệu ứng parallax nền (di chuyển nhẹ theo cuộn)
+            const offset = (scrollTop - valuesTop) * 0.2;
+            values.find('::before');
+            $('.values::before'); // for visual explanation
+            values.css('--parallax-offset', offset + 'px');
+            values.find('::before');
+            values.css('transform', `translateY(${offset * 0.5}px)`);
+            values.get(0).style.setProperty('--offset', offset + 'px');
+            values.get(0).style.transform = `translateY(${offset}px)`;
+
+            // Khi cuộn tới phần này thì hiện nội dung
+            if (valuesTop < scrollTop + windowHeight - 150) {
+                values.find('.text, .image').addClass('active');
+            }
+        });
+
+    </script>
+</body>
+</html>
